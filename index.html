@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>设备指纹</title>
+    <title>设备指纹获取</title>
     <script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"></script>
 </head>
 <body>
@@ -11,13 +11,16 @@
     <button id="getFingerprint">获取指纹</button>
     <script>
         document.getElementById('getFingerprint').addEventListener('click', async () => {
+            // 加载FingerprintJS库
             const fp = await FingerprintJS.load();
+            // 获取指纹
             const result = await fp.get();
             const visitorId = result.visitorId;
+
             console.log(visitorId);
 
-            // 将指纹信息发送到服务器
-            fetch('https://your-server.com/save-fingerprint', {
+            // 将指纹信息发送到后端
+            fetch('https://linminghao-my-flask-app.herokuapp.com/save-fingerprint', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
