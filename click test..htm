@@ -1,0 +1,44 @@
+{\rtf1\ansi\ansicpg932\cocoartf2761
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 <!DOCTYPE html>\
+<html lang="zh">\
+<head>\
+    <meta charset="UTF-8">\
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">\
+    <title>\uc0\u35774 \u22791 \u25351 \u32441 </title>\
+    <script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"></script>\
+</head>\
+<body>\
+    <h1>\uc0\u28857 \u20987 \u25353 \u38062 \u33719 \u21462 \u24744 \u30340 \u35774 \u22791 \u25351 \u32441 </h1>\
+    <button id="getFingerprint">\uc0\u33719 \u21462 \u25351 \u32441 </button>\
+    <script>\
+        document.getElementById('getFingerprint').addEventListener('click', async () => \{\
+            const fp = await FingerprintJS.load();\
+            const result = await fp.get();\
+            const visitorId = result.visitorId;\
+            console.log(visitorId);\
+\
+            // \uc0\u23558 \u25351 \u32441 \u20449 \u24687 \u21457 \u36865 \u21040 \u26381 \u21153 \u22120 \
+            fetch('https://your-server.com/save-fingerprint', \{\
+                method: 'POST',\
+                headers: \{\
+                    'Content-Type': 'application/json'\
+                \},\
+                body: JSON.stringify(result)\
+            \}).then(response => \{\
+                if (response.ok) \{\
+                    alert('\uc0\u25351 \u32441 \u24050 \u25104 \u21151 \u21457 \u36865 \u21040 \u26381 \u21153 \u22120 ');\
+                \} else \{\
+                    alert('\uc0\u21457 \u36865 \u25351 \u32441 \u22833 \u36133 ');\
+                \}\
+            \});\
+        \});\
+    </script>\
+</body>\
+</html>\
+}
