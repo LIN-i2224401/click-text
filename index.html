@@ -19,8 +19,8 @@
 
             console.log(visitorId);
 
-            // 将指纹信息发送到后端
-            fetch('https://linminghao-my-flask-app.herokuapp.com/save-fingerprint', {
+            // 将指纹信息发送到本地服务器
+            fetch('http://127.0.0.1:5000/save-fingerprint', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
