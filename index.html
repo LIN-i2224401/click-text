@@ -5,19 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Browser Fingerprint</title>
     <script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3"></script>
-    <style>
-        #result {
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #ccc;
-        }
-        .success {
-            color: green;
-        }
-        .error {
-            color: red;
-        }
-    </style>
 </head>
 <body>
     <h1>Browser Fingerprint Example</h1>
@@ -51,11 +38,11 @@
             })
             .then(data => {
                 console.log('Success:', data);
-                document.getElementById('result').innerHTML = '<span class="success">Fingerprint stored successfully!</span>';
+                alert('Fingerprint stored successfully!');
             })
             .catch((error) => {
                 console.error('Error:', error);
-                document.getElementById('result').innerHTML = '<span class="error">Error storing fingerprint.</span>';
+                alert('Error storing fingerprint.');
             });
         });
     </script>
