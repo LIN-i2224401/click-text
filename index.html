@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Browser Fingerprint</title>
+    <!-- 引用FingerprintJS库 -->
     <script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3"></script>
 </head>
 <body>
@@ -12,40 +13,45 @@
     <div id="result"></div>
     <script>
         // Initialize an agent at application startup.
-        const fpPromise = FingerprintJS.load();
+        FingerprintJS.load()
+            .then(fp => {
+                document.getElementById('getFingerprint').addEventListener('click', async () => {
+                    const result = await fp.get();
+                    document.getElementById('result').innerText = result.visitorId;
 
-        document.getElementById('getFingerprint').addEventListener('click', async () => {
-            const fp = await fpPromise;
-            const result = await fp.get();
-            document.getElementById('result').innerText = result.visitorId;
+                    console.log('Fingerprint result:', result);
 
-            console.log('Fingerprint result:', result);
-
-            // Send the fingerprint to your API Gateway URL
-            fetch('https://zi2smmgr76.execute-api.ap-northeast-1.amazonaws.com/prod', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(result)
+                    // Send the fingerprint to your API Gateway URL
+                    fetch('https://zi2smmgr76.execute-api.ap-northeast-1.amazonaws.com/prod', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(result)
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        } else {
+                            throw new Error('Network response was not ok');
+                        }
+                    })
+                    .then(data => {
+                        console.log('Success:', data);
+                        alert('Fingerprint stored successfully!');
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                        alert('Error storing fingerprint.');
+                    });
+                });
             })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Network response was not ok');
-                }
-            })
-            .then(data => {
-                console.log('Success:', data);
-                alert('Fingerprint stored successfully!');
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                alert('Error storing fingerprint.');
+            .catch(error => {
+                console.error('Error loading FingerprintJS:', error);
+                alert('Error loading FingerprintJS library.');
             });
-        });
     </script>
 </body>
 </html>
+
 
