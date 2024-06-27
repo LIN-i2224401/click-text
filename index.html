@@ -1,39 +1,35 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>设备指纹获取</title>
-    <script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"></script>
+    <title>Browser Fingerprint</title>
+    <script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3"></script>
 </head>
 <body>
-    <h1>点击按钮获取您的设备指纹</h1>
-    <button id="getFingerprint">获取指纹</button>
+    <h1>Browser Fingerprint Example</h1>
+    <div id="fingerprint"></div>
     <script>
-        document.getElementById('getFingerprint').addEventListener('click', async () => {
-            // 加载FingerprintJS库
-            const fp = await FingerprintJS.load();
-            // 获取指纹
-            const result = await fp.get();
-            const visitorId = result.visitorId;
+        // Initialize an agent at application startup.
+        const fpPromise = FingerprintJS.load();
 
-            console.log(visitorId);
+        // Get the visitor identifier when you need it.
+        fpPromise
+            .then(fp => fp.get())
+            .then(result => {
+                // This is the visitor identifier:
+                const visitorId = result.visitorId;
+                document.getElementById('fingerprint').innerText = visitorId;
 
-            // 将指纹信息发送到本地服务器
-            fetch('http://127.0.0.1:5000/save-fingerprint', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(result)
-            }).then(response => {
-                if (response.ok) {
-                    alert('指纹已成功发送到服务器');
-                } else {
-                    alert('发送指纹失败');
-                }
+                // Send the fingerprint to your API Gateway URL
+                fetch('https://zi2smmgr76.execute-api.ap-northeast-1.amazonaws.com/prod', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(result)
+                });
             });
-        });
     </script>
 </body>
 </html>
