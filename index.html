@@ -8,28 +8,29 @@
 </head>
 <body>
     <h1>Browser Fingerprint Example</h1>
-    <div id="fingerprint"></div>
+    <button id="getFingerprint">Get Fingerprint</button>
+    <div id="result"></div>
     <script>
         // Initialize an agent at application startup.
         const fpPromise = FingerprintJS.load();
 
-        // Get the visitor identifier when you need it.
-        fpPromise
-            .then(fp => fp.get())
-            .then(result => {
-                // This is the visitor identifier:
-                const visitorId = result.visitorId;
-                document.getElementById('fingerprint').innerText = visitorId;
+        document.getElementById('getFingerprint').addEventListener('click', async () => {
+            const fp = await fpPromise;
+            const result = await fp.get();
+            document.getElementById('result').innerText = result.visitorId;
 
-                // Send the fingerprint to your API Gateway URL
-                fetch('https://zi2smmgr76.execute-api.ap-northeast-1.amazonaws.com/prod', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(result)
-                });
-            });
+            // Send the fingerprint to your API Gateway URL
+            fetch('https://zi2smmgr76.execute-api.ap-northeast-1.amazonaws.com/prod', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(result)
+            })
+            .then(response => response.json())
+            .then(data => console.log('Success:', data))
+            .catch((error) => console.error('Error:', error));
+        });
     </script>
 </body>
 </html>
